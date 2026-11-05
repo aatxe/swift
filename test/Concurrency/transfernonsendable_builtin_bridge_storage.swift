@@ -49,9 +49,8 @@ func directBuffer() {
 // MARK: Buffer reached through non-Sendable BridgeObject storage //
 ////////////////////////////////////////////////////////////////////
 
-// Same shape as _BridgeStorage. Without the unavailable conformance below, this
-// struct would be inferred Sendable since Builtin.BridgeObject is Sendable in
-// the AST.
+// This has the same shape as _BridgeStorage.  Since Builtin.BridgeObject is not Sendable,
+// this struct is not inferred Sendable. This allows us to correctly detect races with their contents.
 @frozen
 @usableFromInline
 internal struct BridgeStorage {
