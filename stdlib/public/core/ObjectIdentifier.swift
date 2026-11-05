@@ -21,7 +21,9 @@
 /// have unique identities. There's no notion of identity for structures,
 /// enumerations, functions, or tuples.
 @frozen // trivial-implementation
-public struct ObjectIdentifier: Sendable {
+public struct ObjectIdentifier: @unchecked Sendable {
+  // _value is only used as an identity and is never dereferenced, and so
+  // sharing it across isolations is safe, even though Builtin.RawPointer is not Sendable.
   @usableFromInline // trivial-implementation
   internal let _value: Builtin.RawPointer
 
@@ -78,7 +80,9 @@ public struct ObjectIdentifier: Sendable {
 #else
 
 @frozen // trivial-implementation
-public struct ObjectIdentifier: Sendable {
+public struct ObjectIdentifier: @unchecked Sendable {
+  // _value is only used as an identity and is never dereferenced, and so
+  // sharing it across isolations is safe, even though Builtin.RawPointer is not Sendable.
   @usableFromInline // trivial-implementation
   internal let _value: Builtin.RawPointer
 

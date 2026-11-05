@@ -557,7 +557,17 @@ getBuiltinBuiltinTypeConformance(Type type, const BuiltinType *builtinType,
                                       BuiltinConformanceKind::Synthesized));
         }
       }
-    
+
+      // Reference-y builtins can be used for shared mutable state, so
+      // they should not be Sendable at base. Types using them in safe
+      // ways should opt into Sendability explicitly.
+      if (*kp == KnownProtocolKind::Sendable &&
+          (isa<BuiltinNativeObjectType>(builtinType) ||
+           isa<BuiltinBridgeObjectType>(builtinType) ||
+           isa<BuiltinRawPointerType>(builtinType))) {
+        return ProtocolConformanceRef::forMissingOrInvalid(type, protocol);
+      }
+
       // All other builtin types are Sendable, SendableMetatype, Copyable, and
       // Escapable.
       return ProtocolConformanceRef(

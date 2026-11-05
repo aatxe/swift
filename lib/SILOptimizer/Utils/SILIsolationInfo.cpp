@@ -1728,18 +1728,7 @@ bool SILIsolationInfo::isSendable(SILValue value) {
 }
 
 // Check if the passed in type is NonSendable.
-//
-// NOTE: We special case RawPointer and NativeObject to ensure they are
-// treated as non-Sendable and strict checking is applied to it.
 bool SILIsolationInfo::isNonSendableType(SILType type, SILFunction *fn) {
-  // Treat Builtin.NativeObject, Builtin.RawPointer, and Builtin.BridgeObject as
-  // non-Sendable.
-  if (type.getASTType()->is<BuiltinNativeObjectType>() ||
-      type.getASTType()->is<BuiltinRawPointerType>() ||
-      type.getASTType()->is<BuiltinBridgeObjectType>()) {
-    return true;
-  }
-
   // Treat Builtin.SILToken as Sendable. It cannot escape from the current
   // function. We should change isSendable to hardwire this.
   if (type.getASTType()->is<SILTokenType>()) {
