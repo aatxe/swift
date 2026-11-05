@@ -237,3 +237,10 @@ internal struct _BridgeStorage<NativeClass: AnyObject> {
 }
 
 #endif
+
+// _BridgeStorage is a strong reference to a mutable buffer, so whether it can
+// be shared across concurrency domains depends on the element type, which only
+// the enclosing collection's conformance knows. Without this, it would be
+// inferred Sendable from its Builtin.BridgeObject storage.
+@available(*, unavailable)
+extension _BridgeStorage: Sendable {}
