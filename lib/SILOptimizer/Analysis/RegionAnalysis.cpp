@@ -2990,6 +2990,10 @@ public:
       builder.addRequire(*lookupResult);
       builder.addSend(lookupResult->value, &bi->getAllOperands()[1]);
     }
+
+    // The new task and its initial context are fresh values.
+    translateSILMultiAssign(bi->getResults(), ArrayRef<Operand *>(),
+                            ArrayRef<Operand *>(), RegionMergeReason::Builtin);
   }
 
   void translateSILBuiltin(BuiltinInst *bi) {

@@ -140,7 +140,9 @@ import Swift
 /// ```
 @available(SwiftStdlib 5.1, *)
 @frozen
-public struct Task<Success: Sendable, Failure: Error>: Sendable {
+public struct Task<Success: Sendable, Failure: Error>: @unchecked Sendable {
+  // _task is a reference to the runtime's task object, which synchronizes its own state. So,
+  // sharing it across isolations is safe, even though Builtin.NativeObject is not Sendable.
   @usableFromInline
   @available(SwiftStdlib 5.1, *)
   internal let _task: Builtin.NativeObject
